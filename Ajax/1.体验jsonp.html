@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--
+怎样拿到扒数据？
+1.百度一下：输入想要的数据的关键字
+2.在network里面找到包含wd路径
+3.点一下路径，会在response里面看到响应的数据
+4.路径右击--点击open link new tab 在一个新的地方打开
+
+5.在新打开的地方冲wd=关键字&后面一直删除到cb可以减少数据 即wd=人&cb 回车
+
+得到路径：
+https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=%E4%BA%BA&cb=jQuery1102011866175286112224_1497215821649&_=1497215821662
+
+“jQuery1102011866175286112224_1497215821649&_=1497215821662” 这个其实就是个函数名
+
+可以看到这其实就是一个函数调用，数据是形参
+
+script:平常是引入外联的，可以解决跨域请求
+也就是说script可以发起跨域请求
+
+HTML中引入外部资源的标签 img,script,link
+
+-->
+<script>
+    //定义全局函数
+    function ymy(data) {
+        //打印形参，形参里面是请求过来的数据
+        console.log(data);
+    }
+
+
+</script>
+
+<!-- 下面是调用 -->
+<script src="https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd=%E4%BA%BA&cb=ymy"></script>
+
+<!--
+jsonp总共是三步：
+1)定义了有名字的全局函数
+2)通过script发送请求，这个请求必须在全局函数之后(下面)
+3)当全局函数被调用的时候，会自动传入实参，这个实参就是数据
+我们通过形参来接收这个数据;
+
+-->
+
+
+
+
+
+
+
+</body>
+</html>

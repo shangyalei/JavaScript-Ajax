@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script>
+    /*
+    * 前后台交互的核心:数据;
+    * ajax+jsonp库的使用的时候的设计
+    *
+    *
+    * */
+
+    //库的用法
+    ajax({
+       url:'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',//路径，请求地址
+       data:{"wd":'人民的名义'},//前端传给后台的数据,可选项,有数据就传，没有就是"
+       type:'jsonp',//如果写了jspon,没写默认是"get"(post,get,jsonp)请求方式
+       jsonp:'cb', //可选项，默认是callback
+       dataType:'json',//接收的数据类型 返回的数据类型
+       fnLoading:function(){//等待加载
+           console.log('数据正在加载...')
+       },
+       complete:function(){//加载完成
+           console.log('数据请求结束')
+       },
+       success:function(data){//数据请求成功
+           //数据绑定
+       },
+       error:function(){//数据请求失败
+           //数据请求失败的处理
+       },
+       timeout:2000//请求超时，可选项，没传默认给它个3000
+
+    });
+
+
+
+</script>
+
+
+
+
+</body>
+</html>

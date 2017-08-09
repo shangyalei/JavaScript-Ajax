@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script>
+
+    //把key=value分被放入数组，然后数组.join('&');
+
+
+    var obj={
+        name:"ymy",
+        age:123
+//        t:Math.random()
+    };
+
+
+    function jsonToURL(json){
+        json.t=Math.random();
+        //1.把key=value分被放入数组
+        var ary=[];
+        for(var attr in json){
+            ary.push(attr+"="+json[attr]);
+        }
+        //2.数组.join("&");转字符串
+        return ary.join('&');
+    }
+
+    console.log(jsonToURL(obj));
+
+    /*
+     * 数组转字符串用的是join();
+     * 字符串转数组用的是split();
+     *
+     * */
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

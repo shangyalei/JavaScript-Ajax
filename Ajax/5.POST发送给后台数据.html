@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!--
+发送给后端数据的类型
+一般的数据提交
+enctype="application/x-www-form-urlencoded"
+
+enctype="text/plain"这个用的比较小
+
+分块提交，说明提交的数据比较大例如图片、文件
+enctype="multipart/form-data"
+
+上面的数据类型保存在请求头里面
+Content-Type:
+
+-->
+
+<form method="post" action="" enctype="application/x-www-form-urlencoded">
+    <label for="username">
+        用户名:<input type="text" name="username" id="username">
+    </label>
+    <label for="pass">
+        用户名:<input type="password" name="pass" id="pass">
+    </label>
+    <button id="btn">发送请求</button>
+</form>
+
+
+<script src="jquery-1.11.1.js"></script>
+<script>
+
+    $('#btn').click(function(){
+        $.ajax({
+            url:"json/data.txt",
+            data:$('form').serialize(),//表单序列化,给后台发送数据的时候必填
+            type:'post',
+            success:function(data){
+                console.log(data);
+            }
+        })
+    })
+
+
+
+
+</script>
+
+</body>
+</html>

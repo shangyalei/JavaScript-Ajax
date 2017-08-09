@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    //帮组函数{}==》
+    function jsonToURL(json){
+        json.t=Math.random();
+        //1.把key=value分被放入数组
+        var ary=[];
+        for(var attr in json){
+            ary.push(attr+"="+json[attr]);
+        }
+        //2.数组.join("&");转字符串
+        return ary.join('&');
+    }
+
+    //主函数
+    function ajax(json){
+        json=json||{};
+        if(!json.url) return;//如果没有请求地址，直接阻断程序的执行
+        //以下都是有默认值的
+        var data=json.data||{};//前端向后台请求数据的参数
+        var type=json.type||"get";//默认是get请求
+        var jsonp=json.jsonp||"callback";
+        var timeout=json.timeout||3000;
+
+        var url=json.url;
+        var xml =null;
+        var timer=null;
+
+        //创建一个xml对象,兼容IE
+        if(window.XMLHttpRequest){
+            xml= new XMLHttpRequest();
+        }else{
+            xml= new ActiveXObject('Microsoft.XMLHTTP');
+        }
+
+        //打开地址 发送请求
+        switch(type.toLowerCase()){
+            case 'get':
+                //get中请求的数据的参数，放在地址栏，即url?后面
+                xml.open('get',url+"?"+jsonToURL(data),true);
+                xml.send(null);
+                break;
+            case 'post':
+                xml.open('post',url,true);
+                //POST需要设置请求头，因为数据在请求提里面
+                xml.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+                //POST请求的数据参数，放在请求体里面
+                xml.send(jsonToURL(data));
+                break;
+            case 'jsonp':
+                //创建一个有名字的全局函数,名字中不能有点
+                //在全局函数中，接收传进来的实参
+                //创建一个script，让script可以对本页面发起jsonp请求
+                var fnName='jsonp_'+Math.random();//这是函数名，百度写的是jQuery
+                fnName=fnName.replace('.',"");//这里有坑，名字里不能有点
+                //在全局函数中，接收传进来的实参
+                window[fnName]=function(val){
+                    json.success && json.success(val);
+                    //卸磨杀驴，干掉script;
+                    document.body.removeChild(oS);
+
+                };
+                //要把cb=jsonp_134234234放到参数的最后面
+                data[jsonp]=fnName;
+                //创建一个script,让script可以对本页面发起jsonp请求
+                var oS=document.createElement('script');
+                oS.src=json.url+"?"+jsonToURL(data);
+                document.body.appendChild(oS);
+                break;
+        }
+
+        //等待请求过程
+        fnLoading&&fnLoading();
+
+        //响应请求
+        xml.onreadystatechange=function(){
+            if(xml.readyState===4){
+                complete&&complete();//请求完成
+                clearTimeout(timer);//请求完成关闭定时器
+                if(/^2\d{2}$/.text(xml.status)){//成功
+                    if(json.dataType==='json'){
+                        success && success(jsonParse(xml.responseText));
+                    }else{
+                        success && success(xml.responseText);
+                    }
+                }else{//请求失败 返回状态码
+                    error && error(xml.status);
+                }
+            }
+        };
+
+        if(type==='jsonp') return;
+
+        timer=setTimeout(function(){
+            alert("哥们，网速是太low了！！！");
+            xml.onreadystatechange=null;
+
+        },timeout);
+
+
+    }
+
+
+    function jsonParse(jsonStr){
+        return "JSON" in window?JSON.parse(josnStr):eval("("+josnStr+")");
+    }
+
+
+
+</script>
+
+<!--
+
+所以的类都是window上的一个属性
+"Array" in window
+"Object" in window
+"Function" in window
+
+GET请求:
+它走的是搜索框 方式 路径?user=0000 & pass=000
+请求提空
+
+POST请求：
+它走的是请求头Header
+请求体在send();
+
+
+
+
+-->
+
+
+
+</body>
+</html>
